@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Password Strength Checker</title>
+  <meta name="description" content="Password strength checker and generator with entropy calculation, crack time estimation, and passphrase mode." />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <div class="header-text">
+        <h1 data-i18n="title">Password Strength Checker</h1>
+        <p data-i18n="subtitle">Evaluate password security with entropy analysis</p>
+      </div>
+      <button id="lang-toggle" class="lang-btn" aria-label="Switch language">日本語</button>
+    </div>
+  </header>
+
+  <main class="main">
+    <nav class="tabs" role="tablist">
+      <button class="tab-btn active" data-tab="checker" role="tab" aria-selected="true" data-i18n="tabChecker">Strength Checker</button>
+      <button class="tab-btn" data-tab="generator" role="tab" aria-selected="false" data-i18n="tabGenerator">Password Generator</button>
+    </nav>
+
+    <!-- Checker Panel -->
+    <div id="panel-checker" class="tab-panel active">
+      <section class="card">
+        <div class="input-group">
+          <label for="password-input" class="input-label" data-i18n="passwordLabel">Enter Password</label>
+          <div class="input-wrapper">
+            <input
+              type="password"
+              id="password-input"
+              class="password-input"
+              autocomplete="off"
+              autocorrect="off"
+              autocapitalize="off"
+              spellcheck="false"
+              data-i18n-placeholder="passwordPlaceholder"
+              placeholder="Type your password..."
+            />
+            <button id="toggle-visibility" class="visibility-btn" type="button" data-i18n="showPassword">Show</button>
+          </div>
+        </div>
+
+        <div class="strength-section">
+          <div class="strength-header">
+            <span class="meta-label" data-i18n="strengthLabel">Strength</span>
+            <span id="strength-label" class="strength-label score-text-0">Too Weak</span>
+          </div>
+          <div class="strength-track">
+            <div id="strength-bar" class="strength-bar score-0" style="width: 10%;"></div>
+          </div>
+        </div>
+
+        <div class="metrics">
+          <div class="metric-card">
+            <div class="metric-label" data-i18n="entropyLabel">Entropy</div>
+            <div id="entropy-value" class="metric-value">0 bits</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label" data-i18n="crackTimeLabel">Crack Time</div>
+            <div id="crack-time-value" class="metric-value">instant</div>
+          </div>
+        </div>
+
+        <div class="feedback-section">
+          <h3 class="feedback-title" data-i18n="feedbackTitle">Suggestions</h3>
+          <ul id="feedback-list" class="feedback-list"></ul>
+        </div>
+      </section>
+
+      <p class="security-note" data-i18n="securityNote">All analysis happens in your browser. No data is transmitted.</p>
+    </div>
+
+    <!-- Generator Panel -->
+    <div id="panel-generator" class="tab-panel">
+      <section class="card">
+        <h2 class="section-title" data-i18n="generatorTitle">Password Generator</h2>
+
+        <!-- Mode toggle -->
+        <div class="form-row">
+          <label class="toggle-label">
+            <input type="checkbox" id="passphrase-toggle" />
+            <span data-i18n="passphraseMode">Passphrase mode</span>
+          </label>
+        </div>
+
+        <!-- Passphrase options -->
+        <div id="passphrase-options" class="passphrase-opts" style="display:none;">
+          <div class="form-row">
+            <label class="form-label" data-i18n="passphraseWords">Word count</label>
+            <input type="number" id="passphrase-word-count" class="num-input" min="3" max="8" value="5" />
+          </div>
+          <div class="form-row">
+            <label class="form-label" data-i18n="passphraseSeparator">Separator</label>
+            <select id="passphrase-separator" class="select-input">
+              <option value="-">Hyphen (-)</option>
+              <option value="_">Underscore (_)</option>
+              <option value=".">Dot (.)</option>
+              <option value=" ">Space</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Password options -->
+        <div id="password-options">
+          <div class="form-row slider-row">
+            <label class="form-label" data-i18n="lengthLabel">Length</label>
+            <input type="range" id="gen-length" min="8" max="64" value="16" class="slider" />
+            <span id="gen-length-display" class="slider-val">16</span>
+          </div>
+
+          <div class="checkboxes">
+            <label class="check-label">
+              <input type="checkbox" id="gen-lowercase" checked />
+              <span data-i18n="includeLowercase">Lowercase (a-z)</span>
+            </label>
+            <label class="check-label">
+              <input type="checkbox" id="gen-uppercase" checked />
+              <span data-i18n="includeUppercase">Uppercase (A-Z)</span>
+            </label>
+            <label class="check-label">
+              <input type="checkbox" id="gen-digits" checked />
+              <span data-i18n="includeDigits">Digits (0-9)</span>
+            </label>
+            <label class="check-label">
+              <input type="checkbox" id="gen-symbols" checked />
+              <span data-i18n="includeSymbols">Symbols (!@#...)</span>
+            </label>
+            <label class="check-label">
+              <input type="checkbox" id="gen-exclude-ambiguous" />
+              <span data-i18n="excludeAmbiguous">Exclude ambiguous (0, O, 1, l, I)</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Output -->
+        <div class="output-row">
+          <input type="text" id="gen-output" class="gen-output" readonly />
+          <button id="copy-btn" class="icon-btn copy-btn" type="button" data-i18n="copyBtn">Copy</button>
+          <span id="copy-msg" class="copy-msg" style="opacity:0;" data-i18n="copiedMsg">Copied!</span>
+        </div>
+
+        <button id="gen-btn" class="primary-btn" type="button" data-i18n="generateBtn">Generate</button>
+      </section>
+
+      <!-- Bulk section -->
+      <section class="card">
+        <h3 class="section-title" data-i18n="bulkLabel">Generate multiple</h3>
+        <div class="form-row">
+          <label class="form-label" data-i18n="bulkCount">Count</label>
+          <input type="number" id="bulk-count" class="num-input" min="1" max="50" value="10" />
+        </div>
+        <button id="bulk-btn" class="primary-btn" type="button" data-i18n="generateBulkBtn">Generate All</button>
+        <textarea id="bulk-output" class="bulk-output" readonly rows="8" spellcheck="false"></textarea>
+      </section>
+
+      <p class="security-note" data-i18n="securityNote">All analysis happens in your browser. No data is transmitted.</p>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>Built by <a href="https://sen.ltd" target="_blank" rel="noopener">SEN LLC</a> &mdash; <span data-i18n="securityNote">All analysis happens in your browser.</span></p>
+  </footer>
+
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>

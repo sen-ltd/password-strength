@@ -1,0 +1,12 @@
+{
+  "name": "password-strength",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Password strength checker with entropy calculation and secure generator.",
+  "scripts": {
+    "test": "node --test tests/*.test.js",
+    "serve": "python3 -m http.server 8080"
+  },
+  "license": "MIT"
+}
