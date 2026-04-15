@@ -79,3 +79,10 @@ Crack time assumes 10 billion (10¹⁰) guesses per second — a reasonable esti
 ## License
 
 MIT — Copyright (c) 2026 SEN LLC (SEN 合同会社)
+
+<!-- sen-publish:links -->
+## Links
+
+- 🌐 Demo: https://sen.ltd/portfolio/password-strength/
+- 📝 dev.to: https://dev.to/sendotltd/a-password-strength-checker-with-entropy-math-and-crack-time-estimates-1gjg
+<!-- /sen-publish:links -->
